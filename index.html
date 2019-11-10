@@ -1,0 +1,117 @@
+<html>
+
+<body style="margin: 0px">
+    <table>
+        <tr>
+            <td>
+                <div id="sumDiv">Sum : </div>
+                <div id="clickArea" style="border: 10px; border-color: black"></div>
+            </td>
+        </tr>
+    </table>
+    <table>
+        <tr>
+            <td>
+                <input id="TIME" onkeydown="changeInterval(event)">Interval
+            </td>
+        </tr>
+    </table>
+</body>
+<style>
+        .dot {
+          height: 25px;
+          width: 25px;
+          background-color: #bbb;
+          border-radius: 50%;
+          display: inline-block;
+        }
+        </style>
+<script>
+    var clickArea = document.getElementById("clickArea");
+    var DEFAULT_TIME = 1000;
+    clickArea.style.width = window.innerWidth/2 + "px";
+    clickArea.style.height = window.innerHeight/2 + "px";
+    var sumDiv = document.getElementById("sumDiv");
+    var sum = 0;
+    var THRESHOLD = 100;
+    var intervalInput = document.getElementById("TIME");
+
+    function changeInterval(e)
+    {
+        if (e.keyCode == 13)
+        {
+            DEFAULT_TIME = e.target.value;
+            window.clearInterval(interval);
+            sum = 0;
+            interval = window.setInterval(function()
+            {
+                console.log("make bullet...");
+                var bullet = document.createElement("span");
+                var classB = document.createAttribute("class");
+                classB.value = "dot";
+                bullet.setAttributeNode(classB);
+                var xPos = randomNum(window.innerHeight/2);
+                var yPos = randomNum(window.innerHeight/2);
+                bullet.style.position = "absolute";
+                bullet.style.top = xPos + "px";
+                bullet.style.left = yPos + "px";
+                bullet.onclick = function()
+                {
+                    sum += 1;
+                    sumDiv.innerText = "Sum :" + sum;
+                    clickArea.removeChild(bullet);
+                }
+                clickArea.appendChild(bullet);
+                if (clickArea.children.length >= THRESHOLD)
+                {
+                    window.clearInterval(interval);
+                    clickArea.innerText = "YOU LOSE";
+                    
+                }
+            }, DEFAULT_TIME);
+        }
+    }
+
+    function randomNum(max) 
+    {
+        return Math.random() * Math.floor(max);
+    }
+
+    var interval = window.setInterval(function()
+    {
+        console.log("make bullet...");
+        var bullet = document.createElement("span");
+        var classB = document.createAttribute("class");
+        classB.value = "dot";
+        bullet.setAttributeNode(classB);
+        var xPos = randomNum(window.innerHeight/2);
+        var yPos = randomNum(window.innerHeight/2);
+        bullet.style.position = "absolute";
+        bullet.style.top = xPos + "px";
+        bullet.style.left = yPos + "px";
+        bullet.onclick = function()
+        {
+            sum += 1;
+            sumDiv.innerText = "Sum :" + sum;
+            clickArea.removeChild(bullet);
+        }
+        clickArea.appendChild(bullet);
+        if (clickArea.children.length >= THRESHOLD)
+        {
+            window.clearInterval(interval);
+            clickArea.innerText = "YOU LOSE";
+            
+        }
+    }, DEFAULT_TIME);
+
+
+    clickArea.onclick = function(e)
+    {
+        if (e.target.tagName == "DIV") {
+            sum -= 1;
+            sumDiv.innerText = "Sum :" + sum;
+        }
+    }
+</script>
+
+</html>
