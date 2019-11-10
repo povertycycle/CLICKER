@@ -4,6 +4,7 @@
     <table>
         <tr>
             <td>
+                <button onclick="startClickGame()">Start click game</button>
                 <div id="sumDiv">Sum : </div>
                 <div id="clickArea" style="border: 10px; border-color: black"></div>
             </td>
@@ -35,6 +36,36 @@
     var sum = 0;
     var THRESHOLD = 100;
     var intervalInput = document.getElementById("TIME");
+    var interval;
+    function startClickGame()
+    {
+        interval = window.setInterval(function()
+        {
+            console.log("make bullet...");
+            var bullet = document.createElement("span");
+            var classB = document.createAttribute("class");
+            classB.value = "dot";
+            bullet.setAttributeNode(classB);
+            var xPos = randomNum(window.innerHeight/2);
+            var yPos = randomNum(window.innerHeight/2);
+            bullet.style.position = "absolute";
+            bullet.style.top = xPos + "px";
+            bullet.style.left = yPos + "px";
+            bullet.onclick = function()
+            {
+                sum += 1;
+                sumDiv.innerText = "Sum :" + sum;
+                clickArea.removeChild(bullet);
+            }
+            clickArea.appendChild(bullet);
+            if (clickArea.children.length >= THRESHOLD)
+            {
+                window.clearInterval(interval);
+                clickArea.innerText = "YOU LOSE";
+                
+            }
+        }, DEFAULT_TIME);
+    }
 
     function changeInterval(e)
     {
@@ -77,32 +108,7 @@
         return Math.random() * Math.floor(max);
     }
 
-    var interval = window.setInterval(function()
-    {
-        console.log("make bullet...");
-        var bullet = document.createElement("span");
-        var classB = document.createAttribute("class");
-        classB.value = "dot";
-        bullet.setAttributeNode(classB);
-        var xPos = randomNum(window.innerHeight/2);
-        var yPos = randomNum(window.innerHeight/2);
-        bullet.style.position = "absolute";
-        bullet.style.top = xPos + "px";
-        bullet.style.left = yPos + "px";
-        bullet.onclick = function()
-        {
-            sum += 1;
-            sumDiv.innerText = "Sum :" + sum;
-            clickArea.removeChild(bullet);
-        }
-        clickArea.appendChild(bullet);
-        if (clickArea.children.length >= THRESHOLD)
-        {
-            window.clearInterval(interval);
-            clickArea.innerText = "YOU LOSE";
-            
-        }
-    }, DEFAULT_TIME);
+    
 
 
     clickArea.onclick = function(e)
